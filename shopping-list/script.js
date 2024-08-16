@@ -5,24 +5,39 @@ const itemClear = document.getElementById("clear");
 const itemFilter = document.getElementById("filter");
 
 
-function addItem(e) {
+function onAddItemSubmit(e) {
     e.preventDefault();
-
-
-const newItem = itemInput.value;
-
+    
+    const newItem = itemInput.value;
     if (itemInput.value === "") {
         alert("Please add item");
         return;
     };
+
+    addItemToDOM(newItem);
+    addItemToStorage(newItem);
+    checkUI();
+};
+
+function addItemToDOM(item) {
     const li = document.createElement("li");
-    li.appendChild(document.createTextNode(newItem));
+    li.appendChild(document.createTextNode(item));
 
     const button = createButton("remove-item btn-link text-red");
     li.appendChild(button);
     itemList.appendChild(li);
-    itemInput.value = "";
-    checkUI();
+};
+
+function addItemToStorage(item) {
+    let itemsFromStorage;
+
+    if (localStorage.getItem("items") === null) {
+        itemsFromStorage = [];
+    } else {
+        itemsFromStorage = JSON.parse(localStorage.getItem("items"));
+    };
+    itemsFromStorage.push(item);
+    localStorage.setItem("items", JSON.stringify(itemsFromStorage));
 };
 
 function createButton(classes) {
@@ -82,7 +97,7 @@ function filterItems(e) {
     });
 };
 
-itemForm.addEventListener("submit", addItem);
+itemForm.addEventListener("submit", onAddItemSubmit);
 itemList.addEventListener("click", removeItem);
 itemClear.addEventListener("click", clearItems);
 itemFilter.addEventListener("input", filterItems);
