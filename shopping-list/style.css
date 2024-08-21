@@ -45,6 +45,10 @@ header h1 {
   outline: none;
 }
 
+.edit-mode {
+  color: #ddd;
+}
+
 .form-input-filter {
   margin-top: 20px;
   width: 100%;
