@@ -83,7 +83,12 @@ function onClickItem(e) {
     if (e.target.parentElement.classList.contains("remove-item")) {
         removeItem(e.target.parentElement.parentElement);
     } else {
-        setItemToEdit(e.target);
+        if (e.target.classList.contains("items")) {
+            return;
+        } else {
+            setItemToEdit(e.target);
+        };
+        //fixed
         //clicking on ul area which is not li area bugs the whole thing, fixed by reload
     };
 };
