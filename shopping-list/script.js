@@ -27,6 +27,11 @@ function onAddItemSubmit(e) {
         itemToEdit.classList.remove("edit-mode");
         itemToEdit.remove();
         isEditMode = false;
+    } else {
+        if (checkIfItemExists(newItem)) {
+            alert("Item already exists");
+            return;
+        };
     };
     addItemToDOM(newItem);
     addItemToStorage(newItem);
@@ -79,7 +84,13 @@ function onClickItem(e) {
         removeItem(e.target.parentElement.parentElement);
     } else {
         setItemToEdit(e.target);
+        //clicking on ul area which is not li area bugs the whole thing, fixed by reload
     };
+};
+
+function checkIfItemExists(item) {
+    const itemsFromStorage = getItemsFromStorage();
+    return itemsFromStorage.includes(item);
 };
 
 function setItemToEdit(item) {
@@ -107,7 +118,7 @@ function removeItemFromStorage(item) {
     localStorage.setItem("items", JSON.stringify(itemsFromStorage));
 };
 
-function clearItems(e) {
+function clearItems() {
     if (confirm("Are you sure?")) {
         while (itemList.firstChild) {
             itemList.removeChild(itemList.firstChild);
@@ -118,6 +129,7 @@ function clearItems(e) {
 };
 
 function checkUI() {
+    itemInput.value = "";
     const items = itemList.querySelectorAll("li");
     if (items.length === 0){
         itemClear.style.display = "none";
@@ -126,6 +138,10 @@ function checkUI() {
         itemClear.style.display = "block";
         itemFilter.style.display = "block";
     };
+    formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+    formBtn.style.backgroundColor = "#333";
+    isEditMode = false;
+
 };
 
 function filterItems(e) {
